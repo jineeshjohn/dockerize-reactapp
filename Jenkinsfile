@@ -1,19 +1,17 @@
-pipeline {
-    agent any
-    stages {
-        stage('Stage one') {
-            steps {
-                script {
-                    echo "This is test message from stage one"
-                }
-            }
-        }
-        stage('Stage two') {
-            steps {
-                script {
-                   echo "This is test message from stage two"
-                }
-            }
-        }
+node {
+  try {
+    stage('Checkout') {
+      checkout scm
     }
+    stage('Environment') {
+      sh 'git --version'
+      echo "Branch: ${env.BRANCH_NAME}"
+      sh 'docker -v'
+      sh 'printenv'
+    }
+    
+  }
+  catch (err) {
+    throw err
+  }
 }
